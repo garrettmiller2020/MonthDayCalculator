@@ -5,43 +5,93 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Monday's child is fair of face,");
-        System.out.println("Tuesday's child is full of grace,");
-        System.out.println("Wednesday's child is full of woe,");
-        System.out.println("Thursday's child has far to go,");
-        System.out.println("Friday's child is loving and giving,");
-        System.out.println("Saturday's child works hard for a living,");
-        System.out.println("But the child born on the Sabbath Day,");
-        System.out.println("Is fair and wise and good in every way,");
+        userInput();
+    }
 
-        Scanner input = new Scanner(System.in);
+    static void userInput() {
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println("What month were you born(1-12): ");
+        int month = keyboard.nextInt();
+        System.out.println("What day were you born on(1-31): ");
+        int day = keyboard.nextInt();
+        System.out.println("What year were you born:");
+        int year = keyboard.nextInt();
+        corrector(month, day, year);
+    }
 
-        System.out.print("Enter month(1-12): ");
-        int month = input.nextInt();
-        System.out.print("Enter the day of the month(1-31): ");
-        int dayOfMonth = input.nextInt();
-        System.out.print("What year were you born: ");
-        int year = input.nextInt();
-
-        if (month == 1 || month == 2)
-        {
-            month = (month == 1) ? 13 : 14;
-            year--;
+    static void corrector(int month, int day, int year) {
+        if (month > 12 || month < 1 || day > 31 || day < 1) {
+            System.out.println("You have entered incorrect values. Double check your response.");
+            userInput();
+        } else {
+            zellersCongruence(month, day, year);
         }
+    }
 
-        int dayOfWeek = (dayOfMonth + (26 * (month + 1)) / 10 + (year % 100)
-                + (year % 100) / 4 + (year / 100) / 4 + 5 * (year / 100)) % 7;
+    static void zellersCongruence(int month, int day, int year) {
+        if (month == 1) {
+            month = 13;
+            year --;
+        }
+        if (month == 2) {
+            month = 14;
+            year --;
+        }
+        int yearOfCentury = year % 100;
+        int zeroBasedCent = year / 100;
+        int ans = (day + ((13 * (month + 1)) / 5) + yearOfCentury + (yearOfCentury / 4) + (zeroBasedCent / 4) + (5 * zeroBasedCent));
+        ans = ans%7;
+        poem(ans);
+    }
 
-        System.out.print("You were born on a: ");
-        switch(dayOfWeek)
-        {
-            case 0: System.out.println("Saturday"); break;
-            case 1: System.out.println("Sunday"); break;
-            case 2: System.out.println("Monday"); break;
-            case 3: System.out.println("Tuesday"); break;
-            case 4: System.out.println("Wednesday"); break;
-            case 5: System.out.println("Thursday"); break;
-            case 6: System.out.println("Friday");
+    static void poem(int ans) {
+        String printState;
+        switch (ans) {
+            case 0:
+                printState = "You were born on a saturday meaning you work hard for a living";
+                break;
+            case 1:
+                printState = "You were born on a Sunday meaning you are fair and wise and good in every way";
+                break;
+            case 2:
+                printState = "You were born on a Monday meaning you are fair of face";
+                break;
+            case 3:
+                printState = "You were born on a Tuesday meaning you are full of grace";
+                break;
+            case 4:
+                printState = "You were born on a Wednesday meaning you are full of woe";
+                break;
+            case 5:
+                printState = "You were born on a Thursday meaning you have far to go";
+                break;
+            case 6:
+                printState = "you were born on a Friday meaning you are loving and giving";
+                break;
+            default:
+                printState = "You were born on a ______ meaning you have broken this program";
+                userInput();
+        }
+        printPoem(printState);
+    }
+
+    static void printPoem(String printState) {
+        System.out.println(printState);
+        System.out.println("");
+        doItAgain();
+    }
+
+    static void doItAgain() {
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println("Would you like to enter another date?");
+        System.out.println(" [Y]  [N] ");
+        String ans = keyboard.next();
+        ans = ans.toUpperCase();
+        if (ans.equals("Y")) {
+            userInput();
+        }
+        else{
+            System.exit(0);
         }
     }
 }
